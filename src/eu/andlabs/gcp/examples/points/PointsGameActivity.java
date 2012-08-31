@@ -3,11 +3,13 @@ package eu.andlabs.gcp.examples.points;
 import java.util.HashMap;
 import java.util.Map;
 
+import eu.andlabs.studiolounge.LoungeMainActivity;
 import eu.andlabs.studiolounge.gcp.Lounge;
 import eu.andlabs.studiolounge.gcp.Lounge.LobbyListener;
 import eu.andlabs.studiolounge.gcp.Lounge.GameMsgListener;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -26,25 +28,8 @@ public class PointsGameActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        lounge = new Lounge(this);
-        lounge.register(new LobbyListener() {
-            
-            @Override
-            public void onPlayerLoggedIn(String player) {}
-            
-            @Override
-            public void onPlayerLeft(String player) {}
-            
-            @Override
-            public void onNewHostedGame(String player, String Game) {
-                lounge.joinGame(player);
-            }
-            
-            @Override
-            public void onPlayerJoined(String player) {
-            }
-        });
+        lounge = Lounge.getInstance(this);
+       
         
         players = new HashMap<String, Circle>();
         lounge.register(new GameMsgListener() {

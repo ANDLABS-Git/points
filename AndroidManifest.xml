@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         <activity
-            android:name=".PointsGameActivity"
+            android:name=".MainMenuActivity"
             android:label="@string/title_activity_points_game" android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +22,23 @@
         </activity>
         <service android:name="eu.andlabs.studiolounge.gcp.GCPService"></service>
         
+        
+        <activity 
+            android:name=".PointsGameActivity"
+            >
+          <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="eu.andlabs.lounge" />
+            </intent-filter>
+            
+            </activity>
+            
+        <activity
+            
+            android:name="eu.andlabs.studiolounge.LoungeMainActivity">
+            
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
