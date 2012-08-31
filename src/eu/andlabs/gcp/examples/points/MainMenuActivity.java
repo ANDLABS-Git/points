@@ -1,6 +1,5 @@
 package eu.andlabs.gcp.examples.points;
 
-import eu.andlabs.studiolounge.LoungeMainActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

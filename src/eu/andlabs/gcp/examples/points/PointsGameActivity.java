@@ -3,36 +3,41 @@ package eu.andlabs.gcp.examples.points;
 import java.util.HashMap;
 import java.util.Map;
 
-import eu.andlabs.studiolounge.LoungeMainActivity;
-import eu.andlabs.studiolounge.gcp.Lounge;
-import eu.andlabs.studiolounge.gcp.Lounge.LobbyListener;
-import eu.andlabs.studiolounge.gcp.Lounge.GameMsgListener;
-import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
+import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import eu.andlabs.studiolounge.gcp.Lounge;
+import eu.andlabs.studiolounge.gcp.Lounge.GameMsgListener;
 
 
 public class PointsGameActivity extends Activity {
 
-    private Paint paint;
-    private Lounge lounge;
-    private Map<String, Circle> players;
-    private View view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lounge = Lounge.getInstance(this);
-       
         
-        players = new HashMap<String, Circle>();
-        lounge.register(new GameMsgListener() {
+        final HashMap<String, Circle> players = new HashMap<String, Circle>();
+        
+        final View view = new View(this) {
+            Paint paint = new Paint();
+            
+            @Override
+            protected void onDraw(Canvas canvas) {
+                super.onDraw(canvas);
+                for (Circle circle : players.values()) {
+                    paint.setColor(Color.GREEN);
+                    canvas.drawCircle(circle.x, circle.y, 23, paint);
+                }
+            }};
+        setContentView(view);
+        
+        
+        Lounge.getInstance(this).register(new GameMsgListener() {
             
             @Override
             public void onMessageRecieved(Bundle msg) {
@@ -49,19 +54,6 @@ public class PointsGameActivity extends Activity {
             }
         });
         
-        paint = new Paint();
-        
-        view = new View(this) {
-            
-            @Override
-            protected void onDraw(Canvas canvas) {
-                super.onDraw(canvas);
-                for (Circle circle : players.values()) {
-                    paint.setColor(Color.GREEN);
-                    canvas.drawCircle(circle.x, circle.y, 23, paint);
-                }
-            }};
-        setContentView(view);
     }
 
     @Override
@@ -70,7 +62,7 @@ public class PointsGameActivity extends Activity {
         b.putLong("x", (long) event.getX());
         b.putLong("y", (long) event.getY());
         b.putString("color", "#6e28bd");
-        lounge.sendGameMessage(b);
+        Lounge.getInstance(this).sendGameMessage(b);
         return true;
     }
 
