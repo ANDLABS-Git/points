@@ -57,8 +57,8 @@ public class PointsGameActivity extends Activity {
                     circle = new Circle();
                     players.put(player, circle);
                 }
-                circle.x = msg.getLong("x");
-                circle.y = msg.getLong("y");
+                circle.x = Long.valueOf(msg.getString("x"));
+                circle.y = Long.valueOf(msg.getString("y"));
                 circle.color = msg.getString("color");
                 view.invalidate();
             }
