@@ -1,13 +1,13 @@
 package eu.andlabs.gcp.examples.points;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import eu.andlabs.studiolounge.gcp.Lounge;
@@ -22,8 +22,10 @@ public class PointsGameActivity extends Activity {
         super.onCreate(savedInstanceState);
         
         final HashMap<String, Circle> players = new HashMap<String, Circle>();
-        
+
+
         final View view = new View(this) {
+            
             Paint paint = new Paint();
             
             @Override
@@ -35,8 +37,9 @@ public class PointsGameActivity extends Activity {
                 }
             }};
         setContentView(view);
-        
-        
+
+
+
         Lounge.getInstance(this).register(new GameMsgListener() {
             
             @Override
@@ -56,13 +59,18 @@ public class PointsGameActivity extends Activity {
         
     }
 
+    int cnt;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Bundle b = new Bundle();
-        b.putLong("x", (long) event.getX());
-        b.putLong("y", (long) event.getY());
-        b.putString("color", "#6e28bd");
-        Lounge.getInstance(this).sendGameMessage(b);
+        cnt++;
+        if (cnt % 3 == 0) {
+            Bundle b = new Bundle();
+            b.putLong("x", (long) event.getX());
+            b.putLong("y", (long) event.getY());
+            b.putString("color", "#6e28bd");
+            Lounge.getInstance(this).sendGameMessage(b);
+        }
+        if (cnt % 10 == 0) Log.d("Lounge", "Number of Move Messages: " + cnt);
         return true;
     }
 
