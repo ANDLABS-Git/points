@@ -10,50 +10,58 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import eu.andlabs.gcp.examples.points.PointsGameActivity.Circle;
 import eu.andlabs.studiolounge.gcp.Lounge;
 import eu.andlabs.studiolounge.gcp.Lounge.GameMsgListener;
 
 
 public class PointsGameActivity extends Activity {
 
+    private View mView;
+    private Lounge mLounge;
+    private HashMap<String, Circle> mPlayers;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        final HashMap<String, Circle> players = new HashMap<String, Circle>();
+        mPlayers = new HashMap<String, Circle>();
 
 
-        final View view = new View(this) {
+        mView = new View(this) {
             
             Paint paint = new Paint();
             
             @Override
             protected void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
-                for (Circle circle : players.values()) {
+                for (Circle circle : mPlayers.values()) {
                     paint.setColor(Color.GREEN);
                     canvas.drawCircle(circle.x, circle.y, 23, paint);
                 }
             }};
-        setContentView(view);
-
-
-
-        Lounge.getInstance(this).register(new GameMsgListener() {
+        setContentView(mView);
+    }
+    
+    @Override
+    protected void onStart() {
+        Log.d("Lounge", "POINTS on START");
+        super.onStart();
+        mLounge = new Lounge(this);
+        mLounge.register(new GameMsgListener() {
             
             @Override
             public void onMessageRecieved(Bundle msg) {
                 String player = msg.getString("who");
-                Circle circle = players.get(player);
+                Circle circle = mPlayers.get(player);
                 if (circle == null) {
                     circle = new Circle();
-                    players.put(player, circle);
+                    mPlayers.put(player, circle);
                 }
                 circle.x = Long.valueOf(msg.getString("x"));
                 circle.y = Long.valueOf(msg.getString("y"));
                 circle.color = msg.getString("color");
-                view.invalidate();
+                mView.invalidate();
             }
         });
         
@@ -68,7 +76,7 @@ public class PointsGameActivity extends Activity {
             b.putLong("x", (long) event.getX());
             b.putLong("y", (long) event.getY());
             b.putString("color", "#6e28bd");
-            Lounge.getInstance(this).sendGameMessage(b);
+            mLounge.sendGameMessage(b);
         }
         if (cnt % 10 == 0) Log.d("Lounge", "Number of Move Messages: " + cnt);
         return true;
@@ -78,5 +86,12 @@ public class PointsGameActivity extends Activity {
         long x;
         long y;
         String color;
+    }
+    
+    @Override
+    protected void onStop() {
+        Log.d("Lounge", "POINTS on STOP");
+        unbindService(mLounge);
+        super.onDestroy();
     }
 }
