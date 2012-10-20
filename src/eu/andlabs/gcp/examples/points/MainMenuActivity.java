@@ -1,9 +1,10 @@
 package eu.andlabs.gcp.examples.points;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import eu.andlabs.studiolounge.gcp.Lounge;
+import eu.andlabs.studiolounge.LoungeActivity;
 
 public class MainMenuActivity extends Activity {
 
@@ -15,6 +16,6 @@ public class MainMenuActivity extends Activity {
     }
 
     public void enterLobby(View v) {
-        Lounge.startLoungeActivity(this);
+        startActivity(new Intent(this, LoungeActivity.class));
     }
 }

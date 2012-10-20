@@ -3,6 +3,7 @@ package eu.andlabs.gcp.examples.points;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import eu.andlabs.gcp.examples.points.PointsGameActivity.Circle;
+import eu.andlabs.studiolounge.gcp.GCPService;
 import eu.andlabs.studiolounge.gcp.Lounge;
 import eu.andlabs.studiolounge.gcp.Lounge.GameMsgListener;
 
@@ -45,9 +47,11 @@ public class PointsGameActivity extends Activity {
     
     @Override
     protected void onStart() {
-        Log.d("Lounge", "POINTS on START");
         super.onStart();
-        mLounge = new Lounge(this);
+        Log.d("Lounge", "POINTS on START");
+        
+        mLounge = GCPService.bind(this);
+        
         mLounge.register(new GameMsgListener() {
             
             @Override
@@ -91,7 +95,7 @@ public class PointsGameActivity extends Activity {
     @Override
     protected void onStop() {
         Log.d("Lounge", "POINTS on STOP");
-        unbindService(mLounge);
+        GCPService.unbind(this, mLounge);
         super.onDestroy();
     }
 }

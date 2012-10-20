@@ -20,25 +20,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="eu.andlabs.studiolounge.gcp.GCPService"></service>
         
-        
-        <activity 
-            android:name=".PointsGameActivity"
-            >
-          <intent-filter>
+        <activity android:name=".PointsGameActivity" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="eu.andlabs.lounge" />
             </intent-filter>
-            
-            </activity>
-            
-        <activity
-            
-            android:name="eu.andlabs.studiolounge.LoungeMainActivity">
-            
         </activity>
+        
+        <activity android:name="eu.andlabs.studiolounge.LoungeActivity" />
+        <service android:name="eu.andlabs.studiolounge.gcp.GCPService" />
+        
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
